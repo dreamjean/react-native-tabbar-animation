@@ -1,21 +1,29 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { NavigationContainer } from "@react-navigation/native";
+import AppLoading from "expo-app-loading";
+import React from "react";
 
-export default function App() {
+import useLoadAssets from "./app/hooks/useLoadAssets";
+// import MainNavigator from './app/navigation/MainNavigator';
+import FeedNavigator from "./app/navigation/FeedNavigator";
+
+const App = () => {
+  const { assetsLoaded, setAssetsLoaded, loadAssetsAsync } = useLoadAssets();
+
+  if (!assetsLoaded) {
+    return (
+      <AppLoading
+        startAsync={loadAssetsAsync}
+        onFinish={() => setAssetsLoaded(true)}
+        onError={console.warn}
+      />
+    );
+  }
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <FeedNavigator />
+    </NavigationContainer>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;
